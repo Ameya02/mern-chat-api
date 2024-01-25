@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+
+      server:
+        build: ./
+        container_name: server
+        restart: always
+        ports:
+          - "3001:3001"
+        depends_on:
+          - database
+
+        environment:
+          - MONGO_URL=mongodb://database/mern-chat
+          - JWT_SECRET="chat_secret"
+        networks:
+          - mern-chat
+        command: npm run server
+      database:
+        image: mongo
+        container_name: mongodb
+        ports:
+          - "27017:27017"
+        volumes:
+          - /database:/data/db
+        networks:
+          - mern-chat
+
+networks:
+  mern-chat:
+    driver: bridge
+
